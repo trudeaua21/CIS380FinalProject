@@ -7,6 +7,8 @@ public class PlayerController : MonoBehaviour
 {
     public float speed;
 
+    public Transform cameraTransform;
+
 
     private Rigidbody rb;
     private Animator animator;
@@ -44,9 +46,14 @@ public class PlayerController : MonoBehaviour
         Vector2 moveValue = context.ReadValue<Vector2>();
         if (!moveValue.Equals(Vector2.zero))
         {
+            // apply the camera's rotation to the input so up is always forward
+            Vector3 newMovement = new Vector3(moveValue.x, 0, moveValue.y);
+            newMovement = cameraTransform.rotation * newMovement;
+            newMovement.y = 0;
+
             isMoving = true;
             animator.SetBool("isMoving", true);
-            movement.Set(moveValue.x, 0, moveValue.y);
+            movement = newMovement;
         }
         else
         {
@@ -55,4 +62,5 @@ public class PlayerController : MonoBehaviour
             movement.Set(0, 0, 0);
         }
     }
+
 }

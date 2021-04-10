@@ -6,10 +6,10 @@ using UnityEngine.InputSystem;
 /// </summary>
 public class CameraController : MonoBehaviour
 {
-
+    // speed of the x rotation of the camera
     public float xSpeed;
-    public float ySpeed;
 
+    // player's transform
     public Transform playerTransform;
 
     // the offset of the player's height (so we look at their head and not their feet)
@@ -17,29 +17,19 @@ public class CameraController : MonoBehaviour
 
     // offset is the vector from the player to the camera
     private Vector3 offset;
-    private Vector3 lastValidPosition;
 
+    // the input we're getting to move the camera
     private Vector2 lookInput;
-
-    private float offsetMagnitude;
-
-    private bool cameraAtTop;
-    private bool cameraAtBottom;
 
 
     void Start()
     {
-        cameraAtTop = false;
-        cameraAtBottom = false;
-
         lookInput = new Vector2(0, 0);
 
         playerHeightOffset = new Vector3(0f, 1.5f, 0f);
 
         // make sure we start at the same offset by the player whenever the game runs
         offset = new Vector3(0f, 2f, -3.2f);
-
-        offsetMagnitude = offset.magnitude;
 
         transform.position = playerTransform.position + offset;
     }
@@ -48,55 +38,16 @@ public class CameraController : MonoBehaviour
     // follow cameras should be in late update
     private void LateUpdate()
     {
-        float playerY = playerTransform.position.y;
-
-        float yMin = playerY + 0.3f;
-        float yMax = playerY + 3f;
-
-        // only apply rotation if we get input, 
+        // Only apply rotation if we get input
         // See https://answers.unity.com/questions/46770/rotate-a-vector3-direction.html for vector rotation details.
-        if (!lookInput.Equals(Vector2.zero))
+        if (lookInput.x != 0)
         {
-            float yInput = lookInput.y;
-
-            // only apply y rotation if doing so won't break out of the camera's Y boundaries
-            if (!(yInput > 0 && cameraAtTop) && !(yInput < 0 && cameraAtBottom))
-            {
-                // apply y rotation (apparently rotation * vector is how the rotation is applied)
-                offset = Quaternion.AngleAxis(lookInput.y * ySpeed * Time.deltaTime, Vector3.right) * offset;
-            }
-            
-
             // apply x rotation
             offset = Quaternion.AngleAxis(lookInput.x * xSpeed * Time.deltaTime, Vector3.up) * offset;
         }
 
-        // with our new offset, update the camera position
-        Vector3 newPosition = playerTransform.position + offset;
-
-        // make sure our camera is above the ground
-        if (newPosition.y <= yMin)
-        {
-            newPosition.y = yMin;
-            cameraAtBottom = true;
-            cameraAtTop = false;
-        }
-        // make sure our camera doesn't go over our player
-        else if (newPosition.y >= yMax)
-        {
-            newPosition.y = yMax;
-            cameraAtTop = true;
-            cameraAtBottom = false;
-        }
-        else
-        {
-            cameraAtBottom = false;
-            cameraAtTop = false;
-        }
-
         // update camera position
-        transform.position = newPosition;
-
+        transform.position = playerTransform.position + offset;
 
         // look at the player
         transform.LookAt(playerTransform.position + playerHeightOffset);
