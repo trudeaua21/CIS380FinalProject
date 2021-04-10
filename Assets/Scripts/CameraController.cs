@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -8,6 +6,7 @@ using UnityEngine.InputSystem;
 /// </summary>
 public class CameraController : MonoBehaviour
 {
+
     public float xSpeed;
     public float ySpeed;
 
@@ -18,24 +17,29 @@ public class CameraController : MonoBehaviour
 
     // offset is the vector from the player to the camera
     private Vector3 offset;
-
-    // the minimum y value of the transform of the camera
-    private const float yMin = 0f;
-
-    // the rotation for the z axis of the camera should always be 0
-    private const float zRotation = 0f;
+    private Vector3 lastValidPosition;
 
     private Vector2 lookInput;
-    private bool isLooking;
+
+    private float offsetMagnitude;
+
+    private bool cameraAtTop;
+    private bool cameraAtBottom;
+
 
     void Start()
     {
+        cameraAtTop = false;
+        cameraAtBottom = false;
+
         lookInput = new Vector2(0, 0);
 
         playerHeightOffset = new Vector3(0f, 1.5f, 0f);
 
         // make sure we start at the same offset by the player whenever the game runs
         offset = new Vector3(0f, 2f, -3.2f);
+
+        offsetMagnitude = offset.magnitude;
 
         transform.position = playerTransform.position + offset;
     }
@@ -44,20 +48,55 @@ public class CameraController : MonoBehaviour
     // follow cameras should be in late update
     private void LateUpdate()
     {
-        // apply y rotation (apparently rotation * vector is how the rotation is applied)
-        offset = Quaternion.AngleAxis(lookInput.y * ySpeed * Time.deltaTime, Vector3.right) * offset;
+        float playerY = playerTransform.position.y;
 
-        // apply x rotation
-        offset = Quaternion.AngleAxis(lookInput.x * xSpeed * Time.deltaTime, Vector3.up) * offset;
+        float yMin = playerY + 0.3f;
+        float yMax = playerY + 3f;
 
+        // only apply rotation if we get input, 
+        // See https://answers.unity.com/questions/46770/rotate-a-vector3-direction.html for vector rotation details.
+        if (!lookInput.Equals(Vector2.zero))
+        {
+            float yInput = lookInput.y;
+
+            // only apply y rotation if doing so won't break out of the camera's Y boundaries
+            if (!(yInput > 0 && cameraAtTop) && !(yInput < 0 && cameraAtBottom))
+            {
+                // apply y rotation (apparently rotation * vector is how the rotation is applied)
+                offset = Quaternion.AngleAxis(lookInput.y * ySpeed * Time.deltaTime, Vector3.right) * offset;
+            }
+            
+
+            // apply x rotation
+            offset = Quaternion.AngleAxis(lookInput.x * xSpeed * Time.deltaTime, Vector3.up) * offset;
+        }
+
+        // with our new offset, update the camera position
         Vector3 newPosition = playerTransform.position + offset;
 
         // make sure our camera is above the ground
-        if (newPosition.y < yMin)
+        if (newPosition.y <= yMin)
+        {
             newPosition.y = yMin;
+            cameraAtBottom = true;
+            cameraAtTop = false;
+        }
+        // make sure our camera doesn't go over our player
+        else if (newPosition.y >= yMax)
+        {
+            newPosition.y = yMax;
+            cameraAtTop = true;
+            cameraAtBottom = false;
+        }
+        else
+        {
+            cameraAtBottom = false;
+            cameraAtTop = false;
+        }
 
         // update camera position
         transform.position = newPosition;
+
 
         // look at the player
         transform.LookAt(playerTransform.position + playerHeightOffset);
@@ -65,9 +104,7 @@ public class CameraController : MonoBehaviour
 
 
     /// <summary>
-    /// Get the Vector2 camera rotation and apply it to the offset. Also, apply it to our rotation
-    /// 
-    /// See https://answers.unity.com/questions/46770/rotate-a-vector3-direction.html for vector rotation details.
+    /// Get the Vector2 camera rotation input.
     /// </summary>
     /// <param name="context">The context from which we get Vector2 input.</param>
     public void RotateCamera(InputAction.CallbackContext context)

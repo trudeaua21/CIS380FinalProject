@@ -550,6 +550,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0251fcc80ade9b4588eafdb7847912b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  xSpeed: 20
-  ySpeed: 20
+  xSpeed: 60
+  ySpeed: 60
   playerTransform: {fileID: 606604845}
