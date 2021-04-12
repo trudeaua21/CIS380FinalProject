@@ -9,57 +9,69 @@ public class PlayerController : MonoBehaviour
 
     public Transform cameraTransform;
 
-
-    private Rigidbody rb;
+    private CharacterController controller;
     private Animator animator;
 
+    private Vector2 movementInput;
     private Vector3 movement;
     private bool isMoving;
 
     // Start is called before the first frame update
     void Start()
     {
-        rb = GetComponent<Rigidbody>();
+        movement = new Vector3(0, 0, 0);
+        controller = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        // rotate the player to face the direction they're moving
         if (isMoving)
         {
-            transform.rotation = Quaternion.LookRotation(movement);
-        }
-    }
+            // rotate our input to the correct orientation
 
-    void FixedUpdate()
-    {
-        if (isMoving)
-        {
-            rb.AddForce(movement * speed, ForceMode.Acceleration);
+            // get 2d vectors for our camera and player positions (since we don't care about the y axis for this)
+            Vector2 cameraPos = new Vector2(cameraTransform.position.x, cameraTransform.position.z);
+            Vector2 playerPos = new Vector2(transform.position.x, transform.position.z);
+
+            // the degree we want to rotate our input by is the rotation between up and the vector between player and camera
+            float movementRotationDeg = Vector2.SignedAngle(Vector2.up, playerPos - cameraPos);
+            
+            // change the degree to radians
+            float rads = movementRotationDeg * Mathf.Deg2Rad;
+            float x = movementInput.x;
+            float y = movementInput.y;
+
+            // in 2d vector rotation, rotation by angle d is:
+            // x' = x cos d - y sin d
+            // y' = x sin d - y cos d
+            float newX = (x * Mathf.Cos(rads)) - (y * Mathf.Sin(rads));
+            float newY = (x * Mathf.Sin(rads)) + (y * Mathf.Cos(rads));
+
+            // apply the rotated inputs to our movement vector
+            movement.Set(newX, 0, newY);
+            
+            // rotate the player to face the direction of the movement
+            transform.rotation = Quaternion.LookRotation(movement);
+
+            // move the player
+            controller.Move(movement * speed * Time.deltaTime);
         }
     }
 
     public void Move(InputAction.CallbackContext context)
     {
-        Vector2 moveValue = context.ReadValue<Vector2>();
-        if (!moveValue.Equals(Vector2.zero))
+        movementInput = context.ReadValue<Vector2>();
+        if (!movementInput.Equals(Vector2.zero))
         {
-            // apply the camera's rotation to the input so up is always forward
-            Vector3 newMovement = new Vector3(moveValue.x, 0, moveValue.y);
-            newMovement = cameraTransform.rotation * newMovement;
-            newMovement.y = 0;
-
             isMoving = true;
             animator.SetBool("isMoving", true);
-            movement = newMovement;
         }
         else
         {
             isMoving = false;
             animator.SetBool("isMoving", false);
-            movement.Set(0, 0, 0);
         }
     }
 
