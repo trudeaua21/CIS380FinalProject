@@ -5,7 +5,8 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
-    public float speed;
+    public float walkSpeed;
+    public float runSpeed;
 
     public Transform cameraTransform;
 
@@ -92,8 +93,8 @@ public class PlayerController : MonoBehaviour
 
             transform.rotation = newRotation;
 
-            // move the player. Movement speed is multiplied by 2 if the player is running
-            controller.Move(movement * speed * (isRunning ? 2 : 1) * Time.deltaTime);
+            // move the player 
+            controller.Move(movement * (isRunning ? runSpeed : walkSpeed) * Time.deltaTime);
         }
     }
 
