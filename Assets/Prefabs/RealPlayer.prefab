@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 833814463}
   m_Layer: 0
   m_Name: Side
-  m_TagString: Untagged
+  m_TagString: Sword
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -48,7 +48,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 833814461}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -141,7 +141,7 @@ GameObject:
   - component: {fileID: 1457586248}
   m_Layer: 0
   m_Name: Front
-  m_TagString: Untagged
+  m_TagString: Sword
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -175,7 +175,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1457586246}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -346,7 +346,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4968447437888417514, guid: a93ff086c6d07fd4d8f2c7c386c3f0dc, type: 3}
       propertyPath: m_Name
-      value: Player
+      value: RealPlayer
       objectReference: {fileID: 0}
     - target: {fileID: 4968447437888713476, guid: a93ff086c6d07fd4d8f2c7c386c3f0dc, type: 3}
       propertyPath: m_LocalPosition.x

@@ -47,7 +47,14 @@ public class PlayerController : MonoBehaviour
                 swingHitboxes.SetActive(false);
                 animator.SetBool("isAttacking", false);
             }
+            // if we're far enough into the animation, make the hitbox active
+            else if (!swingHitboxes.activeSelf && swingTimer < 1f)
+            {
+                swingHitboxes.SetActive(true);
+            }
         }
+
+       
         
 
         if (!isSwinging && isMoving)
@@ -106,7 +113,6 @@ public class PlayerController : MonoBehaviour
         {
             isSwinging = true;
             swingTimer = 1.3f;
-            swingHitboxes.SetActive(true);
             animator.SetBool("isAttacking", true);
         }
     }
