@@ -12,7 +12,7 @@ public class EnemyController : MonoBehaviour
 
     Transform target;
     NavMeshAgent agent;
-    ChracterCombat combat;
+    CharacterCombat combat;
     // Start is called before the first frame update
     void Start()
     {
