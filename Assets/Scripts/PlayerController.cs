@@ -9,16 +9,25 @@ public class PlayerController : MonoBehaviour
 
     public Transform cameraTransform;
 
+    public GameObject swingHitboxes;
+
     private CharacterController controller;
     private Animator animator;
 
     private Vector2 movementInput;
     private Vector3 movement;
+
     private bool isMoving;
+    private bool isSwinging;
+
+    private float swingTimer;
 
     // Start is called before the first frame update
     void Start()
     {
+        isMoving = false;
+        isSwinging = false;
+
         movement = new Vector3(0, 0, 0);
         controller = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
@@ -27,7 +36,21 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (isMoving)
+        if(isSwinging)
+        {
+            swingTimer -= Time.deltaTime;
+
+            if(swingTimer <= 0)
+            {
+                isSwinging = false;
+                swingTimer = 0;
+                swingHitboxes.SetActive(false);
+                animator.SetBool("isAttacking", false);
+            }
+        }
+        
+
+        if (!isSwinging && isMoving)
         {
             // rotate our input to the correct orientation
 
@@ -51,9 +74,11 @@ public class PlayerController : MonoBehaviour
 
             // apply the rotated inputs to our movement vector
             movement.Set(newX, 0, newY);
-            
+
             // rotate the player to face the direction of the movement
-            transform.rotation = Quaternion.LookRotation(movement);
+            Quaternion newRotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(movement), 0.1f);
+
+            transform.rotation = newRotation;
 
             // move the player
             controller.Move(movement * speed * Time.deltaTime);
@@ -73,6 +98,22 @@ public class PlayerController : MonoBehaviour
             isMoving = false;
             animator.SetBool("isMoving", false);
         }
+    }
+
+    public void SwingSword(InputAction.CallbackContext context)
+    {
+        if (!isSwinging && context.performed)
+        {
+            isSwinging = true;
+            swingTimer = 1.3f;
+            swingHitboxes.SetActive(true);
+            animator.SetBool("isAttacking", true);
+        }
+    }
+
+    private void SetSwingHitboxActive(bool active)
+    {
+        
     }
 
 }
