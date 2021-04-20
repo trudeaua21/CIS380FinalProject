@@ -8,6 +8,8 @@ public class PlayerController : MonoBehaviour
     public float walkSpeed;
     public float runSpeed;
 
+    public bool toggleToSprint;
+
     public Transform cameraTransform;
 
     public GameObject swingHitboxes;
@@ -125,10 +127,17 @@ public class PlayerController : MonoBehaviour
 
     public void Run(InputAction.CallbackContext context)
     {
-        if (context.performed)
-            isRunning = true;
-        else if (context.canceled)
-            isRunning = false;
+        if (toggleToSprint)
+        {
+            if(context.performed)
+                isRunning = !isRunning;
+        }
+        else
+        {
+            if (context.performed)
+                isRunning = true;
+            else if (context.canceled)
+                isRunning = false;
+        }
     }
-
 }
