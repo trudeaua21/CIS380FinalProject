@@ -9,6 +9,8 @@ public class PlayerController : MonoBehaviour
 
     public Transform cameraTransform;
 
+    public GameObject swingHitboxes;
+
     private CharacterController controller;
     private Animator animator;
 
@@ -42,6 +44,7 @@ public class PlayerController : MonoBehaviour
             {
                 isSwinging = false;
                 swingTimer = 0;
+                swingHitboxes.SetActive(false);
                 animator.SetBool("isAttacking", false);
             }
         }
@@ -103,8 +106,14 @@ public class PlayerController : MonoBehaviour
         {
             isSwinging = true;
             swingTimer = 1.3f;
+            swingHitboxes.SetActive(true);
             animator.SetBool("isAttacking", true);
         }
+    }
+
+    private void SetSwingHitboxActive(bool active)
+    {
+        
     }
 
 }
