@@ -20,6 +20,14 @@
                     "expectedControlType": "Vector2",
                     "processors": "",
                     "interactions": ""
+                },
+                {
+                    "name": "SwingSword",
+                    "type": "Button",
+                    "id": "1df8ada8-ad1a-42de-84bc-0000fec6b1f2",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
                 }
             ],
             "bindings": [
@@ -97,6 +105,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "Look",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "650b87e1-4dce-4d24-aff0-ab8a1f84698d",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SwingSword",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
