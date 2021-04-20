@@ -252,7 +252,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 95b9600c7a513324bb7ee0e33721070a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 3
+  walkSpeed: 3
+  runSpeed: 6
   cameraTransform: {fileID: 0}
   swingHitboxes: {fileID: 1045286514}
 --- !u!114 &81758056
