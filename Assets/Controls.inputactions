@@ -118,6 +118,17 @@
                     "action": "SwingSword",
                     "isComposite": false,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f599e233-c25e-4fff-95f9-9adf0e47b076",
+                    "path": "<Gamepad>/rightTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SwingSword",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         }
