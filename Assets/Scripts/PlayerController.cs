@@ -51,9 +51,11 @@ public class PlayerController : MonoBehaviour
 
             // apply the rotated inputs to our movement vector
             movement.Set(newX, 0, newY);
-            
+
             // rotate the player to face the direction of the movement
-            transform.rotation = Quaternion.LookRotation(movement);
+            Quaternion newRotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(movement), 0.1f);
+
+            transform.rotation = newRotation;
 
             // move the player
             controller.Move(movement * speed * Time.deltaTime);
