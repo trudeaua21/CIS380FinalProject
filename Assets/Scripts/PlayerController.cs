@@ -18,6 +18,7 @@ public class PlayerController : MonoBehaviour
     private Vector3 movement;
 
     private bool isMoving;
+    private bool isRunning;
     private bool isSwinging;
 
     private float swingTimer;
@@ -38,6 +39,9 @@ public class PlayerController : MonoBehaviour
     {
         if(isSwinging)
         {
+            // make sure the animation is at the correct speed
+            animator.speed = 1f;
+
             swingTimer -= Time.deltaTime;
 
             if(swingTimer <= 0)
@@ -54,11 +58,12 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-       
-        
-
         if (!isSwinging && isMoving)
         {
+            if (isRunning)
+                animator.speed = 2f;
+            else
+                animator.speed = 1f;
             // rotate our input to the correct orientation
 
             // get 2d vectors for our camera and player positions (since we don't care about the y axis for this)
@@ -83,12 +88,12 @@ public class PlayerController : MonoBehaviour
             movement.Set(newX, 0, newY);
 
             // rotate the player to face the direction of the movement
-            Quaternion newRotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(movement), 0.1f);
+            Quaternion newRotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(movement), 0.05f);
 
             transform.rotation = newRotation;
 
-            // move the player
-            controller.Move(movement * speed * Time.deltaTime);
+            // move the player. Movement speed is multiplied by 2 if the player is running
+            controller.Move(movement * speed * (isRunning ? 2 : 1) * Time.deltaTime);
         }
     }
 
@@ -117,9 +122,12 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void SetSwingHitboxActive(bool active)
+    public void Run(InputAction.CallbackContext context)
     {
-        
+        if (context.performed)
+            isRunning = true;
+        else if (context.canceled)
+            isRunning = false;
     }
 
 }
