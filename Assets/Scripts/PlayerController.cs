@@ -14,11 +14,18 @@ public class PlayerController : MonoBehaviour
 
     private Vector2 movementInput;
     private Vector3 movement;
+
     private bool isMoving;
+    private bool isSwinging;
+
+    private float swingTimer;
 
     // Start is called before the first frame update
     void Start()
     {
+        isMoving = false;
+        isSwinging = false;
+
         movement = new Vector3(0, 0, 0);
         controller = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
@@ -27,7 +34,20 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (isMoving)
+        if(isSwinging)
+        {
+            swingTimer -= Time.deltaTime;
+
+            if(swingTimer <= 0)
+            {
+                isSwinging = false;
+                swingTimer = 0;
+                animator.SetBool("isAttacking", false);
+            }
+        }
+        
+
+        if (!isSwinging && isMoving)
         {
             // rotate our input to the correct orientation
 
@@ -74,6 +94,16 @@ public class PlayerController : MonoBehaviour
         {
             isMoving = false;
             animator.SetBool("isMoving", false);
+        }
+    }
+
+    public void SwingSword(InputAction.CallbackContext context)
+    {
+        if (!isSwinging && context.performed)
+        {
+            isSwinging = true;
+            swingTimer = 1.3f;
+            animator.SetBool("isAttacking", true);
         }
     }
 
