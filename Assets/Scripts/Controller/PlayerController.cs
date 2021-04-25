@@ -17,6 +17,8 @@ public class PlayerController : MonoBehaviour
     private CharacterController controller;
     private Animator animator;
 
+    CharacterCombat combat;
+
     private Vector2 movementInput;
     private Vector3 movement;
 
@@ -35,6 +37,7 @@ public class PlayerController : MonoBehaviour
         movement = new Vector3(0, 0, 0);
         controller = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
+        combat = GetComponent<CharacterCombat>();
     }
 
     // Update is called once per frame

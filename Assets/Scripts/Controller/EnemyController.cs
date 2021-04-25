@@ -16,7 +16,6 @@ public class EnemyController : MonoBehaviour
 
     private Vector3 lastPosition;
     private Animator animator;
-    private bool isAttack_1;
     //Controls how far the enemy can see
     public float visionRadius = 10f;
 
@@ -35,8 +34,6 @@ public class EnemyController : MonoBehaviour
         body = GetComponent<Rigidbody>();
         lastPosition = transform.position;
         lastTime = Time.deltaTime;
-
-        isAttack_1 = false;
     }
 
     // Update is called once per frame
@@ -62,7 +59,7 @@ public class EnemyController : MonoBehaviour
                 }
             }
         }
-        
+
     }
 
     void Attack_1()
