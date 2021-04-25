@@ -8,8 +8,7 @@ using UnityEngine;
 public class CharacterCombat : MonoBehaviour
 {
     public float attackSpeed = 1f;
-    private float attackCooldown = 0f;
-
+    public float attackCooldown = 0f;
     public float attackDelay = 0.6f;
 
     public event System.Action OnAttack;
@@ -35,9 +34,9 @@ public class CharacterCombat : MonoBehaviour
             {
                 OnAttack();
             }
-            attackCooldown = 1f / attackSpeed;
+            attackCooldown = attackDelay / attackSpeed;
         }
-        targetStats.TakeDamage(myStats.damage.GetValue());
+        //targetStats.TakeDamage(myStats.damage.GetValue());
     }
 
     IEnumerator DoDamage (CharacterStats stats, float delay)

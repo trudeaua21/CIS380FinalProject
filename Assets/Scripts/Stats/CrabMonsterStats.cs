@@ -4,15 +4,44 @@ using UnityEngine;
 
 // Source Code based on https://github.com/Brackeys/RPG-Tutorial
 
-public class CrabMonsterStats : CharacterStats
+public class CrabMonsterStats : MonoBehaviour
 {
-    public override void Die()
-    {
-        base.Die();
+    // Health
+	public int maxHealth = 100;
+	public int currentHealth { get; private set; }
 
-        //Add Death animation
-        Destroy(gameObject);
+	public Stat damage;
+	public Stat armor;
 
-        //Add item drops?
-    }
+	// Set current health to max health
+	// when starting the game.
+	void Awake()
+	{
+		currentHealth = maxHealth;
+	}
+
+	// Damage the character
+	public void TakeDamage(int damage)
+	{
+		// Subtract the armor value
+		damage -= armor.GetValue();
+		damage = Mathf.Clamp(damage, 0, int.MaxValue);
+
+		// Damage the character
+		currentHealth -= damage;
+		Debug.Log(transform.name + " takes " + damage + " damage.");
+
+		// If health reaches zero
+		if (currentHealth <= 0)
+		{
+			Die();
+		}
+	}
+
+	public virtual void Die()
+	{
+		// Die in some way
+		// This method is meant to be overwritten
+		Debug.Log(transform.name + " died.");
+	}
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,48 +8,78 @@ using UnityEngine.AI;
 
 public class EnemyController : MonoBehaviour
 {
+    private const float BASE_SPEED = 3;
+
+    private float CurrentSpeed;
+
+    private float lastTime;
+
+    private Vector3 lastPosition;
     private Animator animator;
-    private bool isMoving;
-    private bool isRunning;
-    private bool isSwinging;
+    private bool isAttack_1;
     //Controls how far the enemy can see
     public float visionRadius = 10f;
 
     Transform target;
     NavMeshAgent agent;
     CharacterCombat combat;
+
+    Rigidbody body;
     // Start is called before the first frame update
     void Start()
     {
         target = PlayerManager.instance.Player.transform;
         agent = GetComponent<NavMeshAgent>();
+        animator = GetComponent<Animator>();
+        combat = GetComponent<CharacterCombat>();
+        body = GetComponent<Rigidbody>();
+        lastPosition = transform.position;
+        lastTime = Time.deltaTime;
+
+        isAttack_1 = false;
     }
 
     // Update is called once per frame
     void Update()
     {
+        SetCurrentSpeed(lastPosition, transform.position);
+        animator.SetFloat("speed", CurrentSpeed);
         float distance = Vector3.Distance(target.position, transform.position);
 
         if(distance <= visionRadius)
         {
             agent.SetDestination(target.position);
-
-            if(distance <= agent.stoppingDistance)
-            {
-                CharacterStats targetStats = target.GetComponent<CharacterStats>();
-                if(targetStats != null)
+            UnityEngine.AI.NavMeshHit hit;
+            if(!agent.Raycast(target.position, out hit)){
+                if(distance <= agent.stoppingDistance)
                 {
-                    combat.Attack(targetStats);
+                    Attack_1();
+                    FaceTarget();
+                } 
+                else if(combat.attackCooldown <= 2)
+                {
+                    agent.speed = BASE_SPEED;
                 }
-                FaceTarget();
             }
+        }
+        
+    }
+
+    void Attack_1()
+    {
+        CharacterStats targetStats = target.GetComponent<CharacterStats>();
+        if(targetStats != null && combat.attackCooldown <= 0f)
+        {
+            combat.Attack(targetStats);
+            animator.Play("Base Layer.Armature|Attack_1", 0, .25f);
+            agent.speed = 1f;
         }
     }
 
     void FaceTarget()
     {
         Vector3 direction = (target.position - transform.position).normalized;
-        Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
+        Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, direction.y, direction.z));
         transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 5f);
     }
 
@@ -56,5 +87,12 @@ public class EnemyController : MonoBehaviour
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, visionRadius);
+    }
+
+    private void SetCurrentSpeed(Vector3 last, Vector3 current){
+        double distance = Math.Sqrt(Math.Pow((current.x - last.x), 2) + Math.Pow((current.z - last.z) , 2));
+        CurrentSpeed = (float)distance / lastTime;
+        lastTime = Time.deltaTime;
+        lastPosition = transform.position;
     }
 }
