@@ -35,6 +35,9 @@ public class PlayerController : MonoBehaviour
         movement = new Vector3(0, 0, 0);
         controller = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
+
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
 
     // Update is called once per frame
