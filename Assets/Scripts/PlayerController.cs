@@ -5,20 +5,33 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
-    public float speed;
+    public float walkSpeed;
+    public float runSpeed;
+
+    public bool toggleToSprint;
 
     public Transform cameraTransform;
+
+    public GameObject swingHitboxes;
 
     private CharacterController controller;
     private Animator animator;
 
     private Vector2 movementInput;
     private Vector3 movement;
+
     private bool isMoving;
+    private bool isRunning;
+    private bool isSwinging;
+
+    private float swingTimer;
 
     // Start is called before the first frame update
     void Start()
     {
+        isMoving = false;
+        isSwinging = false;
+
         movement = new Vector3(0, 0, 0);
         controller = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
@@ -27,8 +40,33 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (isMoving)
+        if(isSwinging)
         {
+            // make sure the animation is at the correct speed
+            animator.speed = 1f;
+
+            swingTimer -= Time.deltaTime;
+
+            if(swingTimer <= 0)
+            {
+                isSwinging = false;
+                swingTimer = 0;
+                swingHitboxes.SetActive(false);
+                animator.SetBool("isAttacking", false);
+            }
+            // if we're far enough into the animation, make the hitbox active
+            else if (!swingHitboxes.activeSelf && swingTimer < 1f)
+            {
+                swingHitboxes.SetActive(true);
+            }
+        }
+
+        if (!isSwinging && isMoving)
+        {
+            if (isRunning)
+                animator.speed = 2f;
+            else
+                animator.speed = 1f;
             // rotate our input to the correct orientation
 
             // get 2d vectors for our camera and player positions (since we don't care about the y axis for this)
@@ -51,12 +89,14 @@ public class PlayerController : MonoBehaviour
 
             // apply the rotated inputs to our movement vector
             movement.Set(newX, 0, newY);
-            
-            // rotate the player to face the direction of the movement
-            transform.rotation = Quaternion.LookRotation(movement);
 
-            // move the player
-            controller.Move(movement * speed * Time.deltaTime);
+            // rotate the player to face the direction of the movement
+            Quaternion newRotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(movement), 0.05f);
+
+            transform.rotation = newRotation;
+
+            // move the player 
+            controller.Move(movement * (isRunning ? runSpeed : walkSpeed) * Time.deltaTime);
         }
     }
 
@@ -75,4 +115,29 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public void SwingSword(InputAction.CallbackContext context)
+    {
+        if (!isSwinging && context.performed)
+        {
+            isSwinging = true;
+            swingTimer = 1.3f;
+            animator.SetBool("isAttacking", true);
+        }
+    }
+
+    public void Run(InputAction.CallbackContext context)
+    {
+        if (toggleToSprint)
+        {
+            if(context.performed)
+                isRunning = !isRunning;
+        }
+        else
+        {
+            if (context.performed)
+                isRunning = true;
+            else if (context.canceled)
+                isRunning = false;
+        }
+    }
 }
