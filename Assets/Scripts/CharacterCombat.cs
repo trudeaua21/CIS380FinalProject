@@ -40,9 +40,9 @@ public class CharacterCombat : MonoBehaviour
     }
 
     public void TakeDamage(CharacterStats playerStats){
-        Debug.Log (transform.name + " swings for " + myStats.damage.GetValue () + " damage");
-        myStats.TakeDamage(playerStats.damage.GetValue());
-    }
+         Debug.Log (transform.name + " swings for " + myStats.damage.GetValue () + " damage");
+         myStats.TakeDamage(playerStats.damage.GetValue());
+     }
 
     IEnumerator DoDamage (CharacterStats stats, float delay)
     {
