@@ -7,17 +7,20 @@ public class CharacterStats : MonoBehaviour
 {
 
 	// Health
-	public int maxHealth = 100;
-	public int currentHealth { get; private set; }
+	public float maxHealth = 100;
+	public float currentHealth { get; private set; }
 
 	public Stat damage;
 	public Stat armor;
+
+	Animator animator;
 
 	// Set current health to max health
 	// when starting the game.
 	void Awake()
 	{
 		currentHealth = maxHealth;
+		animator = GetComponent<Animator>();
 	}
 
 	// Damage the character
@@ -31,6 +34,7 @@ public class CharacterStats : MonoBehaviour
 		currentHealth -= damage;
 		Debug.Log(transform.name + " takes " + damage + " damage.");
 
+		animator.SetFloat("health", currentHealth);
 		// If health reaches zero
 		if (currentHealth <= 0)
 		{
@@ -43,6 +47,7 @@ public class CharacterStats : MonoBehaviour
 		// Die in some way
 		// This method is meant to be overwritten
 		Debug.Log(transform.name + " died.");
+
 	}
 
 }
