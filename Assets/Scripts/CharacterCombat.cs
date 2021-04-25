@@ -40,6 +40,7 @@ public class CharacterCombat : MonoBehaviour
     }
 
     public void TakeDamage(CharacterStats playerStats){
+        Debug.Log (transform.name + " swings for " + myStats.damage.GetValue () + " damage");
         myStats.TakeDamage(playerStats.damage.GetValue());
     }
 

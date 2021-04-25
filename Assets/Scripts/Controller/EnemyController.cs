@@ -63,6 +63,7 @@ public class EnemyController : MonoBehaviour
     }
 
     private void OnTriggerEnter(Collider other){
+        Debug.Log("Sword do be hitting");
         if (other.gameObject.CompareTag("Sword"))
         {
             combat.TakeDamage(target.GetComponent<CharacterStats>());
