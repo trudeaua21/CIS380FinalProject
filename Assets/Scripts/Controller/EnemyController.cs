@@ -7,6 +7,10 @@ using UnityEngine.AI;
 
 public class EnemyController : MonoBehaviour
 {
+    private Animator animator;
+    private bool isMoving;
+    private bool isRunning;
+    private bool isSwinging;
     //Controls how far the enemy can see
     public float visionRadius = 10f;
 
