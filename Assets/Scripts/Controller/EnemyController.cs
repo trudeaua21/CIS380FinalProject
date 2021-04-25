@@ -62,7 +62,12 @@ public class EnemyController : MonoBehaviour
 
     }
 
-    
+    private void OnTriggerEnter(Collider other){
+        if (other.gameObject.CompareTag("Sword"))
+        {
+            combat.TakeDamage(target.GetComponent<CharacterStats>());
+        }
+    }
 
     void Attack_1()
     {

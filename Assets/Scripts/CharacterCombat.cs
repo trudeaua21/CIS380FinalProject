@@ -39,6 +39,10 @@ public class CharacterCombat : MonoBehaviour
         //targetStats.TakeDamage(myStats.damage.GetValue());
     }
 
+    public void TakeDamage(CharacterStats playerStats){
+        myStats.TakeDamage(playerStats.damage.GetValue());
+    }
+
     IEnumerator DoDamage (CharacterStats stats, float delay)
     {
         yield return new WaitForSeconds(delay);
