@@ -62,6 +62,8 @@ public class EnemyController : MonoBehaviour
 
     }
 
+    
+
     void Attack_1()
     {
         CharacterStats targetStats = target.GetComponent<CharacterStats>();
