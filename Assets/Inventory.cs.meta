@@ -3,7 +3,9 @@ guid: d2ebb62bc2dfd1e438be07a51bc97d9f
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - keySprite: {instanceID: 0}
+  - swordSkill: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

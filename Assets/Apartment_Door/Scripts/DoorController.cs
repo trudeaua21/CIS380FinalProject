@@ -96,7 +96,6 @@ public class DoorController : MonoBehaviour
                 }
                 else if (keyNeeded && !gotKey)
                 {
-                    doorAnim.Play("Door_Jam");
                     doorState = DoorState.Jammed;
                 }
             }
@@ -115,7 +114,6 @@ public class DoorController : MonoBehaviour
 
             if (doorState == DoorState.Jammed && !gotKey)
             {
-                doorAnim.Play("Door_Jam");
                 doorState = DoorState.Jammed;
             }
             else if (doorState == DoorState.Jammed && gotKey && !doorAnim.isPlaying)
