@@ -578,13 +578,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 302901653}
-  m_LocalRotation: {x: -0, y: 0.10735572, z: -0, w: 0.99422073}
-  m_LocalPosition: {x: -0.47, y: 1.370306, z: 1.94}
-  m_LocalScale: {x: 0.55414873, y: 1.4721203, z: 2.4903677}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.370306, z: 2.4379272}
+  m_LocalScale: {x: 2.4545407, y: 1.6160791, z: 1.7651826}
   m_Children: []
   m_Father: {fileID: 1305815654}
   m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: 12.326, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &460770789 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 114400655283542936, guid: 39868262e399a4c48bf3739708613d2b, type: 3}
@@ -1516,15 +1516,27 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2422719155510021350, guid: 51a693598ab91134db0849b953ec2012, type: 3}
       propertyPath: m_Height
-      value: 1.2705669
+      value: 1.7547264
+      objectReference: {fileID: 0}
+    - target: {fileID: 2422719155510021350, guid: 51a693598ab91134db0849b953ec2012, type: 3}
+      propertyPath: m_Radius
+      value: 0.6468013
       objectReference: {fileID: 0}
     - target: {fileID: 2422719155510021350, guid: 51a693598ab91134db0849b953ec2012, type: 3}
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2422719155510021350, guid: 51a693598ab91134db0849b953ec2012, type: 3}
+      propertyPath: m_Center.x
+      value: 0.24996537
+      objectReference: {fileID: 0}
+    - target: {fileID: 2422719155510021350, guid: 51a693598ab91134db0849b953ec2012, type: 3}
       propertyPath: m_Center.y
-      value: 1.0277491
+      value: 0.90950584
+      objectReference: {fileID: 0}
+    - target: {fileID: 2422719155510021350, guid: 51a693598ab91134db0849b953ec2012, type: 3}
+      propertyPath: m_Center.z
+      value: 0.11683595
       objectReference: {fileID: 0}
     - target: {fileID: 2422719155510021350, guid: 51a693598ab91134db0849b953ec2012, type: 3}
       propertyPath: m_IsTrigger
