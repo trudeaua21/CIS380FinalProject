@@ -50,6 +50,7 @@ public class EnemyController : MonoBehaviour
         lastTime = Time.deltaTime;
         iFrames = 3f;
         isDead = false;
+        hitBox.SetActive(false);
     }
 
     // Update is called once per frame
