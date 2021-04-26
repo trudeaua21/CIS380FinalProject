@@ -99,6 +99,7 @@ public class EnemyController : MonoBehaviour
                 {
                     FaceTarget();
                     hitBox.SetActive(true);
+                    Attack_1();
                 } 
                 
             }
