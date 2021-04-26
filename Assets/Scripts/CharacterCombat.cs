@@ -34,7 +34,7 @@ public class CharacterCombat : MonoBehaviour
             if(OnAttack != null)
             {
                 OnAttack();
-            }s
+            }
             attackCooldown = attackResetTime;
         }
         //targetStats.TakeDamage(myStats.damage.GetValue());
