@@ -3,10 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class DoorScript : MonoBehaviour
+public class SceneChanger : MonoBehaviour
 {
-    void OnTriggerEnter(Collider other)
+   
+    public void StartGame()
     {
         SceneManager.LoadScene("Spawn");
+    }
+
+    public void QuitGame()
+    {
+        Application.Quit();
     }
 }

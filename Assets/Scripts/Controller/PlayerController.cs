@@ -30,6 +30,7 @@ public class PlayerController : MonoBehaviour
     private bool isSwinging;
     private bool isDead;
     private bool isDamaged;
+    private bool hasKatana;
 
     private float swingTimer;
     private const float SWING_TIMER = 1.3f;
@@ -46,6 +47,7 @@ public class PlayerController : MonoBehaviour
         isSwinging = false;
         isDead = false;
         isDamaged = false;
+        hasKatana = false;
 
         movement = new Vector3(0, 0, 0);
         controller = GetComponent<CharacterController>();
@@ -56,7 +58,6 @@ public class PlayerController : MonoBehaviour
         Cursor.visible = false;
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (isDamaged)
@@ -128,7 +129,7 @@ public class PlayerController : MonoBehaviour
                 transform.rotation = newRotation;
 
                 // move the player 
-                controller.Move(movement * (isRunning ? runSpeed : walkSpeed) * Time.deltaTime);
+                controller.Move(movement * (isRunning ? runSpeed : walkSpeed) * (hasKatana ? 1.5f : 1) * Time.deltaTime);
             }
         }
     }
@@ -206,6 +207,7 @@ public class PlayerController : MonoBehaviour
         if (other.tag.Equals("Pickup"))
         {
             inv.playerGetSkill();
+            hasKatana = true;
             Destroy(other.gameObject);
         }
     }

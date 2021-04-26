@@ -29,7 +29,6 @@ public class KeyController : MonoBehaviour
             invObject.playerGetKey();
             DC.gotKey = true;
             txtToDisplay.gameObject.SetActive(true);
-            txtToDisplay.text = "Key Acquired";
             this.gameObject.SetActive(false);
         }
     }
