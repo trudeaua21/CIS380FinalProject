@@ -13,17 +13,14 @@ public class HitBoxController : MonoBehaviour
     Transform target;
 
     void Start(){
-        myStats = GetComponent<CharacterStats>();
+        combat = GetComponent<CharacterCombat>();
         target = PlayerManager.instance.Player.transform;
     }
 
     private void OnTriggerEnter(Collider other){
         CharacterStats targetStats = target.GetComponent<CharacterStats>();
-        if(targetStats != null && combat.attackCooldown <= 0f)
-        {
-            combat.Attack(targetStats);
-            Debug.Log("I took damage");
-        }
+        combat.Attack(targetStats);
+        Debug.Log("I took damage");
     }
     
     // Update is called once per frame
