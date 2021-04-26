@@ -1416,11 +1416,15 @@ PrefabInstance:
       objectReference: {fileID: 1581755249}
     - target: {fileID: 81758054, guid: 51a693598ab91134db0849b953ec2012, type: 3}
       propertyPath: runSpeed
-      value: 60
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 81758054, guid: 51a693598ab91134db0849b953ec2012, type: 3}
       propertyPath: m_Enabled
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 81758054, guid: 51a693598ab91134db0849b953ec2012, type: 3}
+      propertyPath: walkSpeed
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 81758054, guid: 51a693598ab91134db0849b953ec2012, type: 3}
       propertyPath: cameraTransform
