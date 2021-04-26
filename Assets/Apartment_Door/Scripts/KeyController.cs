@@ -9,6 +9,7 @@ public class KeyController : MonoBehaviour
     Rigidbody keyRB;
     public Text txtToDisplay;
     public DoorController DC;
+    public Inventory invObject;
 
     /// <summary>
     /// Incase user forgets to uncheck isTrigger in box collider
@@ -25,6 +26,7 @@ public class KeyController : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            invObject.playerGetKey();
             DC.gotKey = true;
             txtToDisplay.gameObject.SetActive(true);
             txtToDisplay.text = "Key Acquired";
