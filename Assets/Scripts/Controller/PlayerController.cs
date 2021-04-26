@@ -13,6 +13,7 @@ public class PlayerController : MonoBehaviour
     public Transform cameraTransform;
 
     public GameObject swingHitboxes;
+    public GameObject IraLaunchBox;
 
     private CharacterController controller;
     private Animator animator;
@@ -144,6 +145,7 @@ public class PlayerController : MonoBehaviour
             animator.SetBool("isMoving", false);
         }
     }
+   
 
     public void SwingSword(InputAction.CallbackContext context)
     {

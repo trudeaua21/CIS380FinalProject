@@ -1,11 +1,9 @@
 fileFormatVersion: 2
-guid: d2ebb62bc2dfd1e438be07a51bc97d9f
+guid: 58e174b6565ff414087a9269ed52e723
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences:
-  - keySprite: {instanceID: 0}
-  - swordSkill: {instanceID: 0}
+  defaultReferences: []
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
