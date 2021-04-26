@@ -37,6 +37,12 @@ public class CharacterStats : MonoBehaviour
 		Debug.Log(transform.name + " takes " + damage + " damage.");
 
 		animator.SetFloat("health", currentHealth);
+
+		if(playerController != null)
+        {
+			playerController.takeDamage();
+        }
+
 		// If health reaches zero
 		if (currentHealth <= 0)
 		{

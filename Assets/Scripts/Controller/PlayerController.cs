@@ -28,6 +28,11 @@ public class PlayerController : MonoBehaviour
     private bool isDead;
 
     private float swingTimer;
+    private const float SWING_TIMER = 1.3f;
+    private float damageTimer;
+    private const float DAMAGE_TIMER = 0f;
+    private float invincibilityTimer;
+    private const float INVINCIBILITY_TIMER = 0f;
 
     // Start is called before the first frame update
     void Start()
@@ -132,7 +137,7 @@ public class PlayerController : MonoBehaviour
         if (!isSwinging && context.performed)
         {
             isSwinging = true;
-            swingTimer = 1.3f;
+            swingTimer = SWING_TIMER;
             animator.SetBool("isAttacking", true);
         }
     }
@@ -157,5 +162,10 @@ public class PlayerController : MonoBehaviour
     public void setIsDead(bool value)
     {
         isDead = value;
+    }
+
+    public void takeDamage()
+    {
+        animator.SetBool("TakingDamage", true);
     }
 }
