@@ -66,7 +66,7 @@ public class EnemyController : MonoBehaviour
 
         //Decrease the swing time by the amount of time passed
         if(SwingTime > -1){
-            iFrames -= Time.deltaTime;
+            SwingTime -= Time.deltaTime;
         }
 
         //
