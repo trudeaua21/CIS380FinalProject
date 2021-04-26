@@ -26,13 +26,14 @@ public class PlayerController : MonoBehaviour
     private bool isRunning;
     private bool isSwinging;
     private bool isDead;
+    private bool isDamaged;
 
     private float swingTimer;
     private const float SWING_TIMER = 1.3f;
     private float damageTimer;
-    private const float DAMAGE_TIMER = 0f;
+    private const float DAMAGE_TIMER = 0.5f;
     private float invincibilityTimer;
-    private const float INVINCIBILITY_TIMER = 0f;
+    private const float INVINCIBILITY_TIMER = 2.0f;
 
     // Start is called before the first frame update
     void Start()
@@ -41,6 +42,7 @@ public class PlayerController : MonoBehaviour
         isRunning = false;
         isSwinging = false;
         isDead = false;
+        isDamaged = false;
 
         movement = new Vector3(0, 0, 0);
         controller = GetComponent<CharacterController>();
@@ -54,7 +56,18 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!isDead)
+        if (isDamaged)
+        {
+            damageTimer -= Time.deltaTime;
+            if(damageTimer <= 0)
+            {
+                isDamaged = false;
+                damageTimer = 0;
+                animator.SetBool("isTakingDamage", false);
+            }
+        }
+
+        if (!isDead && !isDamaged)
         {
             if (isSwinging)
             {
@@ -119,16 +132,19 @@ public class PlayerController : MonoBehaviour
 
     public void Move(InputAction.CallbackContext context)
     {
-        movementInput = context.ReadValue<Vector2>();
-        if (!movementInput.Equals(Vector2.zero))
+        if(!isSwinging && !isDamaged && !isDead)
         {
-            isMoving = true;
-            animator.SetBool("isMoving", true);
-        }
-        else
-        {
-            isMoving = false;
-            animator.SetBool("isMoving", false);
+            movementInput = context.ReadValue<Vector2>();
+            if (!movementInput.Equals(Vector2.zero))
+            {
+                isMoving = true;
+                animator.SetBool("isMoving", true);
+            }
+            else
+            {
+                isMoving = false;
+                animator.SetBool("isMoving", false);
+            }
         }
     }
 
@@ -162,10 +178,23 @@ public class PlayerController : MonoBehaviour
     public void setIsDead(bool value)
     {
         isDead = value;
+        isMoving = false;
+        isDamaged = false;
+        isRunning = false;
+        isSwinging = false;
     }
 
     public void takeDamage()
     {
-        animator.SetBool("TakingDamage", true);
+
+        Debug.Log("in playercontroller");
+        // we're invincible while swinging the sword
+        if (isSwinging)
+            return;
+
+        animator.SetBool("isTakingDamage", true);
+        isDamaged = true;
+        damageTimer = DAMAGE_TIMER;
+        invincibilityTimer = INVINCIBILITY_TIMER;
     }
 }
