@@ -12,6 +12,8 @@ public class PlayerController : MonoBehaviour
 
     public Transform cameraTransform;
 
+    public Inventory inv;
+
     public GameObject swingHitboxes;
     public GameObject IraLaunchBox;
 
@@ -195,5 +197,14 @@ public class PlayerController : MonoBehaviour
         isDamaged = true;
         damageTimer = DAMAGE_TIMER;
         invincibilityTimer = INVINCIBILITY_TIMER;
+    }
+
+    public void OnTriggerEnter(Collider other)
+    {
+        if (other.tag.Equals("Pickup"))
+        {
+            inv.playerGetSkill();
+            Destroy(other.gameObject);
+        }
     }
 }
