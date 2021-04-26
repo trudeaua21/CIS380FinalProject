@@ -53,7 +53,7 @@ public class CharacterStats : MonoBehaviour
 	void Update()
 	{
 		if (healthBar != null) { 
-		healthBar.text = "Health= " + currentHealth + "/" + maxHealth;
+		healthBar.text = "Health: " + currentHealth + "/" + maxHealth;
 		}
     }
     public virtual void Die()
