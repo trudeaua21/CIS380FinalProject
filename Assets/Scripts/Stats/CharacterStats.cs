@@ -13,6 +13,8 @@ public class CharacterStats : MonoBehaviour
 	public Stat damage;
 	public Stat armor;
 
+	public PlayerController playerController;
+
 	Animator animator;
 
 	// Set current health to max health
@@ -47,7 +49,7 @@ public class CharacterStats : MonoBehaviour
 		// Die in some way
 		// This method is meant to be overwritten
 		Debug.Log(transform.name + " died.");
-
+		playerController.setIsDead(true);
 	}
 
 }
