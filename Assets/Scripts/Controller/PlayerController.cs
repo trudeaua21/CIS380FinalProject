@@ -132,19 +132,16 @@ public class PlayerController : MonoBehaviour
 
     public void Move(InputAction.CallbackContext context)
     {
-        if(!isSwinging && !isDamaged && !isDead)
+        movementInput = context.ReadValue<Vector2>();
+        if (!movementInput.Equals(Vector2.zero))
         {
-            movementInput = context.ReadValue<Vector2>();
-            if (!movementInput.Equals(Vector2.zero))
-            {
-                isMoving = true;
-                animator.SetBool("isMoving", true);
-            }
-            else
-            {
-                isMoving = false;
-                animator.SetBool("isMoving", false);
-            }
+            isMoving = true;
+            animator.SetBool("isMoving", true);
+        }
+        else
+        {
+            isMoving = false;
+            animator.SetBool("isMoving", false);
         }
     }
 
