@@ -16,4 +16,8 @@ public class SwordRotating : MonoBehaviour
     {
         transform.Rotate(Vector3.up, rotateSpeed * Time.deltaTime, Space.World);
     }
+    void OnTriggerEnter(Collider other)
+    {
+        this.gameObject.SetActive(false);
+    }
 }
