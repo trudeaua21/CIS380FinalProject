@@ -49,7 +49,9 @@ public class CharacterStats : MonoBehaviour
 		// Die in some way
 		// This method is meant to be overwritten
 		Debug.Log(transform.name + " died.");
-		playerController.setIsDead(true);
+		
+		if(playerController != null)
+			playerController.setIsDead(true);
 	}
 
 }
