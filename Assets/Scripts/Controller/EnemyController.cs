@@ -10,9 +10,13 @@ public class EnemyController : MonoBehaviour
 {
     private const float BASE_SPEED = 3;
 
+    private float iFrames;
+
     private float CurrentSpeed;
 
     private float lastTime;
+
+    private bool isStunned;
 
     private Vector3 lastPosition;
     private Animator animator;
@@ -37,11 +41,13 @@ public class EnemyController : MonoBehaviour
         stats = GetComponent<CharacterStats>();
         lastPosition = transform.position;
         lastTime = Time.deltaTime;
+        iFrames = 3f;
     }
 
     // Update is called once per frame
     void Update()
     {
+        iFrames -= Time.deltaTime;
         if(stats.currentHealth > 0){
             SetCurrentSpeed(lastPosition, transform.position);
             animator.SetFloat("speed", CurrentSpeed);
@@ -68,11 +74,23 @@ public class EnemyController : MonoBehaviour
     }
 
     private void OnTriggerEnter(Collider other){
-         Debug.Log("Sword do be hitting");
-         if (other.gameObject.CompareTag("Sword"))
-         {
-              combat.TakeDamage(target.GetComponent<CharacterStats>());
+        if(iFrames < 0){
+            if (other.gameObject.CompareTag("Sword"))
+            {
+                Debug.Log("Sword do be hitting");
+                combat.TakeDamage(target.GetComponent<CharacterStats>());
+                iFrames = 1.5f;
+                if(stats.currentHealth > 0){
+                    animator.Play("Base Layer.Armature|TakeDamage", 0, .25f);
+                }
+                
+            }
+            agent.speed = 0f;
         }
+         else {
+            Debug.Log("Iframes worked");
+        }
+        Debug.Log("Iframes: " + iFrames);
     }
 
     void Attack_1()
