@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -15,7 +16,13 @@ public class PlayerController : MonoBehaviour
     public Inventory inv;
 
     public GameObject swingHitboxes;
-    public GameObject IraLaunchBox;
+
+    public AudioSource audioSource;
+
+    // audio clips to play
+    public AudioClip hurtClip;
+    public AudioClip deathClip;
+
 
     private CharacterController controller;
     private Animator animator;
@@ -39,6 +46,8 @@ public class PlayerController : MonoBehaviour
     private float invincibilityTimer;
     private const float INVINCIBILITY_TIMER = 2.0f;
 
+    private float restartTimer;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -54,12 +63,24 @@ public class PlayerController : MonoBehaviour
         animator = GetComponent<Animator>();
         combat = GetComponent<CharacterCombat>();
 
+        restartTimer = 3.0f;
+
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
 
     void Update()
     {
+
+        if (isDead)
+        {
+            restartTimer -= Time.deltaTime;
+            if(restartTimer <= 0)
+            {
+                SceneManager.LoadScene("Spawn");
+            }
+        }
+
         if (isDamaged)
         {
             damageTimer -= Time.deltaTime;
@@ -179,22 +200,23 @@ public class PlayerController : MonoBehaviour
 
     public void setIsDead(bool value)
     {
-
-        FindObjectOfType<AudioManger>().Play("");
         isDead = value;
         isMoving = false;
         isDamaged = false;
         isRunning = false;
         isSwinging = false;
+        audioSource.clip = deathClip;
+        audioSource.Play();
     }
 
     public void takeDamage()
     {
-
-        Debug.Log("in playercontroller");
         // we're invincible while swinging the sword
         if (isSwinging)
             return;
+
+        audioSource.clip = hurtClip;
+        audioSource.Play();
 
         animator.SetBool("isTakingDamage", true);
         isDamaged = true;
