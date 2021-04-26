@@ -7,8 +7,6 @@ public class HitBoxController : MonoBehaviour
     // Start is called before the first frame update
 
     public GameObject hitBox;
-    CharacterStats myStats;
-    CharacterStats targetStats;
     CharacterCombat combat;
     Transform target;
 
