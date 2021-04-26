@@ -23,6 +23,8 @@ public class EnemyController : MonoBehaviour
     NavMeshAgent agent;
     CharacterCombat combat;
 
+    CharacterStats stats;
+
     Rigidbody body;
     // Start is called before the first frame update
     void Start()
@@ -32,6 +34,7 @@ public class EnemyController : MonoBehaviour
         animator = GetComponent<Animator>();
         combat = GetComponent<CharacterCombat>();
         body = GetComponent<Rigidbody>();
+        stats = GetComponent<CharacterStats>();
         lastPosition = transform.position;
         lastTime = Time.deltaTime;
     }
@@ -39,23 +42,25 @@ public class EnemyController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        SetCurrentSpeed(lastPosition, transform.position);
-        animator.SetFloat("speed", CurrentSpeed);
-        float distance = Vector3.Distance(target.position, transform.position);
+        if(stats.currentHealth > 0){
+            SetCurrentSpeed(lastPosition, transform.position);
+            animator.SetFloat("speed", CurrentSpeed);
+            float distance = Vector3.Distance(target.position, transform.position);
 
-        if(distance <= visionRadius)
-        {
-            agent.SetDestination(target.position);
-            UnityEngine.AI.NavMeshHit hit;
-            if(!agent.Raycast(target.position, out hit)){
-                if(distance <= agent.stoppingDistance)
-                {
-                    Attack_1();
-                    FaceTarget();
-                } 
-                else if(combat.attackCooldown <= 2)
-                {
-                    agent.speed = BASE_SPEED;
+            if(distance <= visionRadius)
+            {
+                agent.SetDestination(target.position);
+                UnityEngine.AI.NavMeshHit hit;
+                if(!agent.Raycast(target.position, out hit)){
+                    if(distance <= agent.stoppingDistance)
+                    {
+                        Attack_1();
+                        FaceTarget();
+                    } 
+                    else if(combat.attackCooldown <= 2)
+                    {
+                        agent.speed = BASE_SPEED;
+                    }
                 }
             }
         }
