@@ -1218,6 +1218,18 @@ PrefabInstance:
       propertyPath: m_TagString
       value: Sword
       objectReference: {fileID: 0}
+    - target: {fileID: 1457586247, guid: 51a693598ab91134db0849b953ec2012, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1.75
+      objectReference: {fileID: 0}
+    - target: {fileID: 1457586247, guid: 51a693598ab91134db0849b953ec2012, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 1.291
+      objectReference: {fileID: 0}
+    - target: {fileID: 1457586249, guid: 51a693598ab91134db0849b953ec2012, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2422719155509892636, guid: 51a693598ab91134db0849b953ec2012, type: 3}
       propertyPath: m_RootOrder
       value: 5
