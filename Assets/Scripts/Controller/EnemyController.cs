@@ -71,6 +71,8 @@ public class EnemyController : MonoBehaviour
         //
         if(SwingTime > 0 && SwingTime < 0.5f){
             hitBox.SetActive(true);
+        } else if (SwingTime < 0f){
+            hitBox.SetActive(false);
         }
 
         //Speed Calculation
@@ -95,7 +97,7 @@ public class EnemyController : MonoBehaviour
                 agent.SetDestination(target.position);
                 
                 //If the player is in stopping distance face it and attack
-                if(distance <= agent.stoppingDistance)
+                if(distance <= agent.stoppingDistance & !isAttacking)
                 {
                     FaceTarget();
                     hitBox.SetActive(true);
@@ -133,7 +135,7 @@ public class EnemyController : MonoBehaviour
     {
         Vector3 direction = (target.position - transform.position).normalized;
         Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, direction.y, direction.z));
-        transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 5f);
+        transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 10f);
     }
 
     private void AnimatorUpdater(){

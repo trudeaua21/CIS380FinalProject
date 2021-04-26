@@ -20,7 +20,7 @@ public class HitBoxController : MonoBehaviour
     private void OnTriggerEnter(Collider other){
         CharacterStats targetStats = target.GetComponent<CharacterStats>();
         combat.Attack(targetStats);
-        Debug.Log("I took damage");
+        
     }
     
     // Update is called once per frame
