@@ -7,7 +7,7 @@ using UnityEngine;
 [RequireComponent(typeof(CharacterStats))]
 public class CharacterCombat : MonoBehaviour
 {
-    public float attackResetTime = 3.0f
+    public float attackResetTime = 3.0f;
     public float attackSpeed = 1f;
     public float attackCooldown = 0f;
     public float attackDelay = 0.6f;
