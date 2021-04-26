@@ -16,8 +16,10 @@ public class HitBoxController : MonoBehaviour
     }
 
     private void OnTriggerEnter(Collider other){
-        CharacterStats targetStats = target.GetComponent<CharacterStats>();
-        combat.Attack(targetStats);
+        if(hitBox.activeSelf){
+            CharacterStats targetStats = target.GetComponent<CharacterStats>();
+            combat.Attack(targetStats);
+        }
         
     }
     

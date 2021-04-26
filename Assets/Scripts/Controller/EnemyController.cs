@@ -59,6 +59,10 @@ public class EnemyController : MonoBehaviour
         //Update All animation statuses
         AnimatorUpdater();
 
+        if(stats.currentHealth < 0){
+            isDead = true;
+        }
+
         //Decrease Iframes by the amount of time passed
         if(iFrames > -1){
             iFrames -= Time.deltaTime;
@@ -72,7 +76,7 @@ public class EnemyController : MonoBehaviour
         //
         if(SwingTime > 0 && SwingTime < 0.5f){
             hitBox.SetActive(true);
-        } else if (SwingTime < 0f){
+        } else if (SwingTime <= 0f){
             hitBox.SetActive(false);
         }
 
@@ -100,8 +104,8 @@ public class EnemyController : MonoBehaviour
                 //If the player is in stopping distance face it and attack
                 if(distance <= agent.stoppingDistance & !isAttacking)
                 {
+                    SwingTime = 1f;
                     FaceTarget();
-                    hitBox.SetActive(true);
                     Attack_1();
                 } 
                 
@@ -111,15 +115,14 @@ public class EnemyController : MonoBehaviour
     }
 
     private void OnTriggerEnter(Collider other){
-            if (other.gameObject.CompareTag("Sword") && !isTakingDamage)
-            {
-                if(!isDead && iFrames < 0)
-                {
+        if (other.gameObject.CompareTag("Sword") && !isTakingDamage)
+        {
+                if(!isDead){
                     combat.TakeDamage(target.GetComponent<CharacterStats>());
                     animator.Play("Base Layer.Armature|TakeDamage", 0, .25f);
+                    hitBox.SetActive(false);
                 }
-                iFrames = 2.0f;
-            }  
+        }
     }
 
     void Attack_1()
@@ -158,14 +161,6 @@ public class EnemyController : MonoBehaviour
             isWalking = true;
         } else {
             isWalking = false;
-        }
-
-        if(animator.GetCurrentAnimatorStateInfo(0).IsName("Base Layer.Armature|Die")){
-            isDying = true;
-            isDead = true;
-            agent.speed = 0f;
-        } else {
-            isDying = false;
         }
 
         if(animator.GetCurrentAnimatorStateInfo(0).IsName("Base Layer.Armature|Rest_1")){
