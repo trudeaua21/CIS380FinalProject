@@ -7,6 +7,6 @@ public class DoorScript : MonoBehaviour
 {
     void OnTriggerEnter(Collider other)
     {
-        SceneManager.LoadScene("MainMenu");
+        SceneManager.LoadScene("Spawn");
     }
 }
