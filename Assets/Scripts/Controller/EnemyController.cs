@@ -10,10 +10,12 @@ public class EnemyController : MonoBehaviour
 {
     private const float BASE_SPEED = 3f;
     private const float ATTACK_MOVE_SPEED = 1f;
+    private float SwingTime = 1f;
 
     private float iFrames;
     private float CurrentSpeed;
     private float lastTime;
+    private float AttackLength;
 
     private bool isAttacking;
     private bool isWalking;
@@ -27,6 +29,7 @@ public class EnemyController : MonoBehaviour
     //Controls how far the enemy can see
     public float visionRadius = 10f;
 
+    public GameObject hitBox;
     Transform target;
     NavMeshAgent agent;
     CharacterCombat combat;
@@ -56,7 +59,19 @@ public class EnemyController : MonoBehaviour
         AnimatorUpdater();
 
         //Decrease Iframes by the amount of time passed
-        iFrames -= Time.deltaTime;
+        if(iFrames > -1){
+            iFrames -= Time.deltaTime;
+        }
+
+        //Decrease the swing time by the amount of time passed
+        if(SwingTime > -1){
+            iFrames -= Time.deltaTime;
+        }
+
+        //
+        if(SwingTime > 0 && SwingTime < 0.5f){
+            hitBox.SetActive(true);
+        }
 
         //Speed Calculation
         SetCurrentSpeed(lastPosition, transform.position);
@@ -83,7 +98,7 @@ public class EnemyController : MonoBehaviour
                 if(distance <= agent.stoppingDistance)
                 {
                     FaceTarget();
-                    Attack_1();
+                    hitBox.SetActive(true);
                 } 
                 
             }
@@ -92,22 +107,15 @@ public class EnemyController : MonoBehaviour
     }
 
     private void OnTriggerEnter(Collider other){
-        Debug.Log("Sword do be hitting");
             if (other.gameObject.CompareTag("Sword") && !isTakingDamage)
             {
-                
-                
-                iFrames = 2.0f;
-                if(!isDead)
+                if(!isDead && iFrames < 0)
                 {
                     combat.TakeDamage(target.GetComponent<CharacterStats>());
                     animator.Play("Base Layer.Armature|TakeDamage", 0, .25f);
                 }
-            }
-         else {
-            Debug.Log("Iframes worked");
-        }
-        Debug.Log("Iframes: " + iFrames);
+                iFrames = 2.0f;
+            }  
     }
 
     void Attack_1()
@@ -115,7 +123,6 @@ public class EnemyController : MonoBehaviour
         CharacterStats targetStats = target.GetComponent<CharacterStats>();
         if(targetStats != null && combat.attackCooldown <= 0f)
         {
-            combat.Attack(targetStats);
             animator.Play("Base Layer.Armature|Attack_1", 0, .25f);
             agent.speed = 1f;
         }
@@ -129,6 +136,7 @@ public class EnemyController : MonoBehaviour
     }
 
     private void AnimatorUpdater(){
+
         if(animator.GetCurrentAnimatorStateInfo(0).IsName("Base Layer.Armature|Attack_1")){
             isAttacking = true;
         } else {
