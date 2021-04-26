@@ -8,7 +8,8 @@ using UnityEngine.AI;
 
 public class EnemyController : MonoBehaviour
 {
-    private const float BASE_SPEED = 3;
+    private const float BASE_SPEED = 3f;
+    private const float ATTACK_MOVE_SPEED = 1f;
 
     private float iFrames;
     private float CurrentSpeed;
@@ -51,48 +52,58 @@ public class EnemyController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //Update All animation statuses
         AnimatorUpdater();
+
+        //Decrease Iframes by the amount of time passed
         iFrames -= Time.deltaTime;
+
+        //Speed Calculation
         SetCurrentSpeed(lastPosition, transform.position);
+        //Set speed in animator to control if the walking animation
         animator.SetFloat("speed", CurrentSpeed);
 
-        if((!isTakingDamage || !isAttacking || !isDying) && !isDead){
+        if((!isTakingDamage || !isDying) && !isDead){
+            if(isAttacking){
+                agent.speed = ATTACK_MOVE_SPEED;
+            } else {
+                agent.speed = BASE_SPEED;
+            }
                 
-                float distance = Vector3.Distance(target.position, transform.position);
+            //Distance to the player
+            float distance = Vector3.Distance(target.position, transform.position);
 
-                if(distance <= visionRadius)
+            //Determine if player is in vision radius
+            if(distance <= visionRadius)
+            {
+                //Move to player
+                agent.SetDestination(target.position);
+                
+                //If the player is in stopping distance face it and attack
+                if(distance <= agent.stoppingDistance)
                 {
-                    agent.SetDestination(target.position);
-                    UnityEngine.AI.NavMeshHit hit;
-                    if(!agent.Raycast(target.position, out hit)){
-                        if(distance <= agent.stoppingDistance)
-                        {
-                            Attack_1();
-                            FaceTarget();
-                        } 
-                        else if(combat.attackCooldown <= 2)
-                        {
-                            agent.speed = BASE_SPEED;
-                        }
-                    }
-                }
+                    FaceTarget();
+                    Attack_1();
+                } 
+                
+            }
             
         }
     }
 
     private void OnTriggerEnter(Collider other){
-        if(iFrames < 0){
-            if (other.gameObject.CompareTag("Sword"))
+        Debug.Log("Sword do be hitting");
+            if (other.gameObject.CompareTag("Sword") && !isTakingDamage)
             {
-                Debug.Log("Sword do be hitting");
-                combat.TakeDamage(target.GetComponent<CharacterStats>());
-                iFrames = 1.5f;
-                if(stats.currentHealth > 0){
+                
+                
+                iFrames = 2.0f;
+                if(!isDead)
+                {
+                    combat.TakeDamage(target.GetComponent<CharacterStats>());
                     animator.Play("Base Layer.Armature|TakeDamage", 0, .25f);
                 }
             }
-            agent.speed = 0f;
-        }
          else {
             Debug.Log("Iframes worked");
         }
@@ -126,6 +137,7 @@ public class EnemyController : MonoBehaviour
 
         if(animator.GetCurrentAnimatorStateInfo(0).IsName("Base Layer.Armature|TakeDamage")){
             isTakingDamage = true;
+            agent.speed = 0f;
         } else {
             isTakingDamage = false;
         }
@@ -138,12 +150,8 @@ public class EnemyController : MonoBehaviour
 
         if(animator.GetCurrentAnimatorStateInfo(0).IsName("Base Layer.Armature|Die")){
             isDying = true;
-        } else {
-            isDying = false;
-        }
-
-        if(animator.GetCurrentAnimatorStateInfo(0).IsName("Base Layer.Armature|Die")){
-            isDying = true;
+            isDead = true;
+            agent.speed = 0f;
         } else {
             isDying = false;
         }
