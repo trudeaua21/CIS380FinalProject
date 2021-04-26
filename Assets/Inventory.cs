@@ -25,7 +25,7 @@ public class Inventory : MonoBehaviour
         keySprite.SetActive(true);
     }
 
-    private void playerGetSkill()
+    public void playerGetSkill()
     {
         haveSkill = true;
         swordSkill.SetActive(true);
