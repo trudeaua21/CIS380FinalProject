@@ -1,5 +1,5 @@
 using UnityEngine;
-
+using UnityEngine.UI;
 /* Base class that player and enemies can derive from to include stats. */
 // Source Code based on https://github.com/Brackeys/RPG-Tutorial
 
@@ -12,6 +12,9 @@ public class CharacterStats : MonoBehaviour
 
 	public Stat damage;
 	public Stat armor;
+	public Text healthBar;
+
+	public PlayerController playerController;
 
 	Animator animator;
 
@@ -35,19 +38,32 @@ public class CharacterStats : MonoBehaviour
 		Debug.Log(transform.name + " takes " + damage + " damage.");
 
 		animator.SetFloat("health", currentHealth);
+
+		if(playerController != null)
+        {
+			playerController.takeDamage();
+        }
+
 		// If health reaches zero
 		if (currentHealth <= 0)
 		{
 			Die();
 		}
 	}
-
-	public virtual void Die()
+	void Update()
+	{
+		if (healthBar != null) { 
+		healthBar.text = "Health: " + currentHealth + "/" + maxHealth; 
+		}
+    }
+    public virtual void Die()
 	{
 		// Die in some way
 		// This method is meant to be overwritten
 		Debug.Log(transform.name + " died.");
-
+		
+		if(playerController != null)
+			playerController.setIsDead(true);
 	}
 
 }

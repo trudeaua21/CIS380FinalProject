@@ -8,11 +8,19 @@ using UnityEngine.AI;
 
 public class EnemyController : MonoBehaviour
 {
-    private const float BASE_SPEED = 3;
+    private const float BASE_SPEED = 3f;
+    private const float ATTACK_MOVE_SPEED = 1f;
 
+    private float iFrames;
     private float CurrentSpeed;
-
     private float lastTime;
+
+    private bool isAttacking;
+    private bool isWalking;
+    private bool isDying;
+    private bool isResting;
+    private bool isTakingDamage;
+    private bool isDead;
 
     private Vector3 lastPosition;
     private Animator animator;
@@ -23,6 +31,8 @@ public class EnemyController : MonoBehaviour
     NavMeshAgent agent;
     CharacterCombat combat;
 
+    CharacterStats stats;
+
     Rigidbody body;
     // Start is called before the first frame update
     void Start()
@@ -32,42 +42,72 @@ public class EnemyController : MonoBehaviour
         animator = GetComponent<Animator>();
         combat = GetComponent<CharacterCombat>();
         body = GetComponent<Rigidbody>();
+        stats = GetComponent<CharacterStats>();
         lastPosition = transform.position;
         lastTime = Time.deltaTime;
+        iFrames = 3f;
+        isDead = false;
     }
 
     // Update is called once per frame
     void Update()
     {
-        SetCurrentSpeed(lastPosition, transform.position);
-        animator.SetFloat("speed", CurrentSpeed);
-        float distance = Vector3.Distance(target.position, transform.position);
+        //Update All animation statuses
+        AnimatorUpdater();
 
-        if(distance <= visionRadius)
-        {
-            agent.SetDestination(target.position);
-            UnityEngine.AI.NavMeshHit hit;
-            if(!agent.Raycast(target.position, out hit)){
+        //Decrease Iframes by the amount of time passed
+        iFrames -= Time.deltaTime;
+
+        //Speed Calculation
+        SetCurrentSpeed(lastPosition, transform.position);
+        //Set speed in animator to control if the walking animation
+        animator.SetFloat("speed", CurrentSpeed);
+
+        if((!isTakingDamage || !isDying) && !isDead){
+            if(isAttacking){
+                agent.speed = ATTACK_MOVE_SPEED;
+            } else {
+                agent.speed = BASE_SPEED;
+            }
+                
+            //Distance to the player
+            float distance = Vector3.Distance(target.position, transform.position);
+
+            //Determine if player is in vision radius
+            if(distance <= visionRadius)
+            {
+                //Move to player
+                agent.SetDestination(target.position);
+                
+                //If the player is in stopping distance face it and attack
                 if(distance <= agent.stoppingDistance)
                 {
-                    Attack_1();
                     FaceTarget();
+                    Attack_1();
                 } 
-                else if(combat.attackCooldown <= 2)
-                {
-                    agent.speed = BASE_SPEED;
-                }
+                
             }
+            
         }
-
     }
 
     private void OnTriggerEnter(Collider other){
         Debug.Log("Sword do be hitting");
-        if (other.gameObject.CompareTag("Sword"))
-        {
-            combat.TakeDamage(target.GetComponent<CharacterStats>());
+            if (other.gameObject.CompareTag("Sword") && !isTakingDamage)
+            {
+                
+                
+                iFrames = 2.0f;
+                if(!isDead)
+                {
+                    combat.TakeDamage(target.GetComponent<CharacterStats>());
+                    animator.Play("Base Layer.Armature|TakeDamage", 0, .25f);
+                }
+            }
+         else {
+            Debug.Log("Iframes worked");
         }
+        Debug.Log("Iframes: " + iFrames);
     }
 
     void Attack_1()
@@ -88,6 +128,41 @@ public class EnemyController : MonoBehaviour
         transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 5f);
     }
 
+    private void AnimatorUpdater(){
+        if(animator.GetCurrentAnimatorStateInfo(0).IsName("Base Layer.Armature|Attack_1")){
+            isAttacking = true;
+        } else {
+            isAttacking = false;
+        }
+
+        if(animator.GetCurrentAnimatorStateInfo(0).IsName("Base Layer.Armature|TakeDamage")){
+            isTakingDamage = true;
+            agent.speed = 0f;
+        } else {
+            isTakingDamage = false;
+        }
+
+        if(animator.GetCurrentAnimatorStateInfo(0).IsName("Base Layer.Armature|Walk_Cycle_1")){
+            isWalking = true;
+        } else {
+            isWalking = false;
+        }
+
+        if(animator.GetCurrentAnimatorStateInfo(0).IsName("Base Layer.Armature|Die")){
+            isDying = true;
+            isDead = true;
+            agent.speed = 0f;
+        } else {
+            isDying = false;
+        }
+
+        if(animator.GetCurrentAnimatorStateInfo(0).IsName("Base Layer.Armature|Rest_1")){
+            isResting = true;
+        } else {
+            isResting = false;
+        }
+
+    }
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;

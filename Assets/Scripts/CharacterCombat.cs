@@ -7,6 +7,7 @@ using UnityEngine;
 [RequireComponent(typeof(CharacterStats))]
 public class CharacterCombat : MonoBehaviour
 {
+    public float attackResetTime = 3.0f;
     public float attackSpeed = 1f;
     public float attackCooldown = 0f;
     public float attackDelay = 0.6f;
@@ -34,15 +35,15 @@ public class CharacterCombat : MonoBehaviour
             {
                 OnAttack();
             }
-            attackCooldown = attackDelay / attackSpeed;
+            attackCooldown = attackResetTime;
         }
         //targetStats.TakeDamage(myStats.damage.GetValue());
     }
 
     public void TakeDamage(CharacterStats playerStats){
-        Debug.Log (transform.name + " swings for " + myStats.damage.GetValue () + " damage");
-        myStats.TakeDamage(playerStats.damage.GetValue());
-    }
+         Debug.Log (transform.name + " swings for " + myStats.damage.GetValue () + " damage");
+         myStats.TakeDamage(playerStats.damage.GetValue());
+     }
 
     IEnumerator DoDamage (CharacterStats stats, float delay)
     {
