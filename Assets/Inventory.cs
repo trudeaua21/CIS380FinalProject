@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class Inventory : MonoBehaviour
 {
-    bool haveKey;
+    public bool hasKey;
     bool haveSkill;
     public GameObject keySprite;
     public GameObject swordSkill;
     // Start is called before the first frame update
     void Start()
     {
-        haveKey = false;
+        hasKey = false;
         haveSkill = false;
         keySprite.SetActive(false);
         swordSkill.SetActive(false);
@@ -19,9 +19,9 @@ public class Inventory : MonoBehaviour
     }
 
     // Update is called once per frame
-    void playerGetKey()
+    public void playerGetKey()
     {
-        haveKey = true;
+        hasKey = true;
         keySprite.SetActive(true);
     }
 

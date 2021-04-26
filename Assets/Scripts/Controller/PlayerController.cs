@@ -13,6 +13,7 @@ public class PlayerController : MonoBehaviour
     public Transform cameraTransform;
 
     public GameObject swingHitboxes;
+    public GameObject IraLaunchBox;
 
     private CharacterController controller;
     private Animator animator;
@@ -132,21 +133,19 @@ public class PlayerController : MonoBehaviour
 
     public void Move(InputAction.CallbackContext context)
     {
-        if(!isSwinging && !isDamaged && !isDead)
+        movementInput = context.ReadValue<Vector2>();
+        if (!movementInput.Equals(Vector2.zero))
         {
-            movementInput = context.ReadValue<Vector2>();
-            if (!movementInput.Equals(Vector2.zero))
-            {
-                isMoving = true;
-                animator.SetBool("isMoving", true);
-            }
-            else
-            {
-                isMoving = false;
-                animator.SetBool("isMoving", false);
-            }
+            isMoving = true;
+            animator.SetBool("isMoving", true);
+        }
+        else
+        {
+            isMoving = false;
+            animator.SetBool("isMoving", false);
         }
     }
+   
 
     public void SwingSword(InputAction.CallbackContext context)
     {

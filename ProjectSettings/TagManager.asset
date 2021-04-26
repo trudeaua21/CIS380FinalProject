@@ -5,7 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - Sword
-  - CrabHitBox
+  - Pickup
   layers:
   - Default
   - TransparentFX
