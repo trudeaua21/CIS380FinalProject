@@ -293,6 +293,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44f076cb78a86f14b96692ea30971589, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  attackResetTime: 3
   attackSpeed: 1
   attackCooldown: 2
   attackDelay: 0.6
@@ -1331,9 +1332,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44f076cb78a86f14b96692ea30971589, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  attackResetTime: 3
   attackSpeed: 1
-  attackCooldown: 0
-  attackDelay: 3
+  attackCooldown: 3
+  attackDelay: 0.75
 --- !u!114 &1305815651
 MonoBehaviour:
   m_ObjectHideFlags: 0
