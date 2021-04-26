@@ -180,7 +180,11 @@ public class PlayerController : MonoBehaviour
     public void setIsDead(bool value)
     {
 
+<<<<<<< Updated upstream
         FindObjectOfType<AudioManger>().Play("");
+=======
+        //FindObjectOfType<AudioManger>().Play("PlayerDeath");
+>>>>>>> Stashed changes
         isDead = value;
         isMoving = false;
         isDamaged = false;
@@ -197,6 +201,7 @@ public class PlayerController : MonoBehaviour
             return;
 
         animator.SetBool("isTakingDamage", true);
+        FindObjectOfType<AudioManger>().Play("PlayerHurt");
         isDamaged = true;
         damageTimer = DAMAGE_TIMER;
         invincibilityTimer = INVINCIBILITY_TIMER;
