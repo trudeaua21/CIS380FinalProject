@@ -8,6 +8,11 @@ using UnityEngine.AI;
 
 public class EnemyController : MonoBehaviour
 {
+
+    public AudioSource audioSource;
+
+    public AudioClip sliceClip;
+
     private const float BASE_SPEED = 3f;
     private const float ATTACK_MOVE_SPEED = 1f;
     private float SwingTime = 1f;
@@ -117,11 +122,14 @@ public class EnemyController : MonoBehaviour
     private void OnTriggerEnter(Collider other){
         if (other.gameObject.CompareTag("Sword") && !isTakingDamage)
         {
-                if(!isDead){
-                    combat.TakeDamage(target.GetComponent<CharacterStats>());
-                    animator.Play("Base Layer.Armature|TakeDamage", 0, .25f);
-                    hitBox.SetActive(false);
-                }
+            audioSource.clip = sliceClip;
+            audioSource.Play();
+
+            if(!isDead){
+                combat.TakeDamage(target.GetComponent<CharacterStats>());
+                animator.Play("Base Layer.Armature|TakeDamage", 0, .25f);
+                hitBox.SetActive(false);
+            }
         }
     }
 
