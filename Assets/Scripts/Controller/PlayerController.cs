@@ -178,6 +178,8 @@ public class PlayerController : MonoBehaviour
 
     public void setIsDead(bool value)
     {
+
+        FindObjectOfType<AudioManger>().Play("")
         isDead = value;
         isMoving = false;
         isDamaged = false;
